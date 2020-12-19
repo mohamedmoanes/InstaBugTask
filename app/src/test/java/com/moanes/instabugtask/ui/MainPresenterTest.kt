@@ -3,6 +3,7 @@ package com.moanes.instabugtask.ui
 import androidx.core.text.HtmlCompat
 import com.moanes.instabugtask.data.MainRepo
 import com.moanes.instabugtask.data.Result
+import com.moanes.instabugtask.data.Word
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -12,7 +13,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -53,14 +53,14 @@ class MainPresenterTest {
                 "</html>"
 
 
-        val mapResult = TreeMap<String, Int>()
-        mapResult["Page"] = 1
-        mapResult["Title"] = 1
-        mapResult["This"] = 2
-        mapResult["is"] = 2
-        mapResult["a"] = 2
-        mapResult["Heading"] = 1
-        mapResult["paragraph"] = 1
+        val mapList = ArrayList<Word>()
+        mapList.add(Word("page",1))
+        mapList.add(Word("title",1))
+        mapList.add(Word("this",2))
+        mapList.add(Word("is",2))
+        mapList.add(Word("a",2))
+        mapList.add(Word("heading",1))
+        mapList.add(Word("paragraph",1))
 
         every { mainRepo.getWebPage(url) } returns Result.Success(html)
 
@@ -72,7 +72,7 @@ class MainPresenterTest {
         // then
         verify { view.showLoading() }
         verify { mainRepo.getWebPage(url) }
-        verify { view.setMap(mapResult) }
+        verify { view.setList(mapList) }
         verify { view.hideLoading() }
     }
 

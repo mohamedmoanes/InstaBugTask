@@ -1,10 +1,11 @@
 package com.moanes.instabugtask.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.moanes.instabugtask.R
 import com.moanes.instabugtask.data.MainRepoImpl
+import com.moanes.instabugtask.data.Word
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executors
 
@@ -14,14 +15,12 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter.getHtml("https://instabug.com/")
-//        presenter.getHtml("https://istbug.com/")
     }
 
-    override fun setMap(map: Map<String, Int>) {
-        runOnUiThread {
-            print(map.toString())
-        }
-
+    override fun setList(list: List<Word>) {
+            runOnUiThread {
+                print(list.toString())
+            }
     }
 
     override fun showLoading() {

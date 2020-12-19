@@ -1,32 +1,32 @@
 package com.moanes.instabugtask.utils
 
+import com.moanes.instabugtask.data.Word
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
 
 class ExtensionFunctionsTest {
     @Test
     fun `string toWordsCountMap success`() {
-        val expectedMap=TreeMap<String,Int>()
-        expectedMap["test"] = 2
-        expectedMap["a"] = 1
-        expectedMap["for"] = 1
-        expectedMap["the"] = 1
-        expectedMap["method"] = 1
-        expectedMap["success"] = 1
-        expectedMap["lets"] = 1
-        Assert.assertEquals(expectedMap,"Test 1 a test for the method success lets test.".toWordsCountMap())
+        val expectedList=ArrayList<Word>()
+        expectedList.add(Word("test",2))
+        expectedList.add(Word("a",1))
+        expectedList.add(Word("for",1))
+        expectedList.add(Word("the",1))
+        expectedList.add(Word("method",1))
+        expectedList.add(Word("success",1))
+        expectedList.add(Word("lets",1))
+        Assert.assertEquals(expectedList,"Test 1 a test for the method success lets test.".toWordsCountList())
     }
 
     @Test
     fun `string toWordsCountMap with empty string should return empty map`(){
-        val expectedMap=TreeMap<String,Int>()
-        Assert.assertEquals(expectedMap,"".toWordsCountMap())
+        val expectedList=ArrayList<Word>()
+        Assert.assertEquals(expectedList,"".toWordsCountList())
     }
     @Test
     fun `string toWordsCountMap with numbers only should return empty map`(){
-        val expectedMap=TreeMap<String,Int>()
-        Assert.assertEquals(expectedMap,"125 1 25 1 24 1 5".toWordsCountMap())
+        val expectedList=ArrayList<Word>()
+        Assert.assertEquals(expectedList,"125 1 25 1 24 1 5".toWordsCountList())
     }
 
 }

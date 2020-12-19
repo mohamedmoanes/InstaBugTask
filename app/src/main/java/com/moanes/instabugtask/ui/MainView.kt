@@ -1,8 +1,10 @@
 package com.moanes.instabugtask.ui
 
+import com.moanes.instabugtask.data.Word
+
 interface MainView {
-    fun setMap(map: Map<String, Int>)
-    fun onFailure(msg:String?)
+    fun setList(list: List<Word>)
+    fun onFailure(msg: String?)
     fun showLoading()
     fun hideLoading()
 }
