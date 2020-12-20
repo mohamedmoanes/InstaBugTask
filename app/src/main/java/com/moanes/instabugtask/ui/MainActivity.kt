@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.moanes.instabugtask.R
 import com.moanes.instabugtask.data.MainRepoImpl
 import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.utils.manager.SharedPreferencesManagerImpl
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity(), MainView {
-    private val presenter = MainPresenter(MainRepoImpl(), Executors.newSingleThreadExecutor(),this)
+    private val presenter = MainPresenter(
+        MainRepoImpl(SharedPreferencesManagerImpl()),
+        Executors.newSingleThreadExecutor(),
+        this
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,16 +25,17 @@ class MainActivity : AppCompatActivity(), MainView {
         presenter.getHtml("https://instabug.com/")
     }
 
-    private fun initWordListRV(list: List<Word>){
-        val adapter=WordsAdapter()
-        wordsListRV.adapter=adapter
-        wordsListRV.layoutManager=LinearLayoutManager(this)
+    private fun initWordListRV(list: List<Word>) {
+        val adapter = WordsAdapter()
+        wordsListRV.adapter = adapter
+        wordsListRV.layoutManager = LinearLayoutManager(this)
         adapter.submitList(list)
     }
+
     override fun setList(list: List<Word>) {
-            runOnUiThread {
-                initWordListRV(list)
-            }
+        runOnUiThread {
+            initWordListRV(list)
+        }
     }
 
     override fun showLoading() {

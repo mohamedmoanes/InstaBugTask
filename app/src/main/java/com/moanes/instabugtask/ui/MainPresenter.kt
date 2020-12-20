@@ -15,8 +15,7 @@ class MainPresenter(
 
         val worker = Runnable {
 
-            val result = mainRepo.getWebPage(url)
-            when (result) {
+            when (val result = mainRepo.getWebPage(url)) {
                 is Result.Success -> {
                     val htmlWithoutTags =
                         removeHtmlTagsAndCss(result.value)
@@ -24,7 +23,13 @@ class MainPresenter(
                     view.setList(htmlWithoutTags.toWordsCountList())
                 }
 
-                is Result.Failure -> view.onFailure(result.throwable.localizedMessage)
+                is Result.Failure -> {
+                    val htmlWithoutTags =
+                        removeHtmlTagsAndCss(result.value)
+                    
+                    view.setList(htmlWithoutTags.toWordsCountList())
+                    view.onFailure(result.throwable.localizedMessage)
+                }
             }
 
             view.hideLoading()
