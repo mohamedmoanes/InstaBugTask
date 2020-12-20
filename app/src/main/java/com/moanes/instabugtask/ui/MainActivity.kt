@@ -3,6 +3,7 @@ package com.moanes.instabugtask.ui
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.moanes.instabugtask.R
 import com.moanes.instabugtask.data.MainRepoImpl
 import com.moanes.instabugtask.data.Word
@@ -14,12 +15,19 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
         presenter.getHtml("https://instabug.com/")
     }
 
+    private fun initWordListRV(list: List<Word>){
+        val adapter=WordsAdapter()
+        wordsListRV.adapter=adapter
+        wordsListRV.layoutManager=LinearLayoutManager(this)
+        adapter.submitList(list)
+    }
     override fun setList(list: List<Word>) {
             runOnUiThread {
-                print(list.toString())
+                initWordListRV(list)
             }
     }
 
