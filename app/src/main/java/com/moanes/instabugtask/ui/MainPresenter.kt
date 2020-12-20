@@ -1,13 +1,14 @@
 package com.moanes.instabugtask.ui
 
-import com.moanes.instabugtask.data.MainRepo
-import com.moanes.instabugtask.data.Result
+import com.moanes.instabugtask.data.model.Result
+import com.moanes.instabugtask.data.repositories.MainRepo
 import com.moanes.instabugtask.utils.toWordsCountList
+import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 
 class MainPresenter(
     private val mainRepo: MainRepo,
-    private val executor: ExecutorService,
+    private val executor: Executor,
     private val view: MainView
 ) {
     fun getHtml(url: String) {
@@ -26,10 +27,8 @@ class MainPresenter(
                 is Result.Failure -> {
                     val htmlWithoutTags =
                         removeHtmlTagsAndCss(result.value)
-                    
                     view.setList(htmlWithoutTags.toWordsCountList())
-                    view.onFailure(result.throwable.localizedMessage)
-                }
+                    view.onFailure(result.throwable.localizedMessage)}
             }
 
             view.hideLoading()
@@ -45,7 +44,10 @@ class MainPresenter(
         return result
     }
 
-    fun clean() =
-        executor.shutdown()
+    fun clean() {
+        if(executor is ExecutorService){
+            executor.shutdown()
+        }
+    }
 
 }

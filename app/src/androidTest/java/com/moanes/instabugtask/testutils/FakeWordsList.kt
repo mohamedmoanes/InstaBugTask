@@ -1,6 +1,6 @@
 package com.moanes.instabugtask.testutils
 
-import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.data.model.Word
 
 object FakeWordsList {
     val wordsList = ArrayList<Word>(

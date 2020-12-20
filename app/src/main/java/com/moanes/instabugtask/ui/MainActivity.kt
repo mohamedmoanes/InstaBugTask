@@ -5,15 +5,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.moanes.instabugtask.R
-import com.moanes.instabugtask.data.MainRepoImpl
-import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.data.model.Word
+import com.moanes.instabugtask.data.network.ServiceImpl
+import com.moanes.instabugtask.data.repositories.MainRepoImpl
 import com.moanes.instabugtask.utils.manager.SharedPreferencesManagerImpl
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity(), MainView {
     private val presenter = MainPresenter(
-        MainRepoImpl(SharedPreferencesManagerImpl()),
+        MainRepoImpl(ServiceImpl(), SharedPreferencesManagerImpl()),
         Executors.newSingleThreadExecutor(),
         this
     )

@@ -1,6 +1,6 @@
 package com.moanes.instabugtask.utils
 
-import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.data.model.Word
 import org.junit.Assert
 import org.junit.Test
 

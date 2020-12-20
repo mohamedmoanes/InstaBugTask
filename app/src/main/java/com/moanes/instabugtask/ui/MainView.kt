@@ -1,6 +1,6 @@
 package com.moanes.instabugtask.ui
 
-import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.data.model.Word
 
 interface MainView {
     fun setList(list: List<Word>)

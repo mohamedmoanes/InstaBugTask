@@ -1,110 +1,76 @@
 package com.moanes.instabugtask.ui
 
-import androidx.core.text.HtmlCompat
-import com.moanes.instabugtask.data.MainRepo
-import com.moanes.instabugtask.data.Result
-import com.moanes.instabugtask.data.Word
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.mockkStatic
-import io.mockk.verify
+import com.moanes.instabugtask.testingutils.FakeData
+import com.moanes.instabugtask.testingutils.MainRepoTestingImpl
+import com.moanes.instabugtask.testingutils.MainViewTestingImpl
+import com.moanes.instabugtask.testingutils.TestingThreadExecutor
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import java.util.concurrent.Executor
 
 
 class MainPresenterTest {
-    @MockK
-    lateinit var mainRepo: MainRepo
+    lateinit var mainRepo: MainRepoTestingImpl
 
-    @MockK
-    lateinit var view: MainView
+    lateinit var view: MainViewTestingImpl
 
-    private lateinit var executor: ExecutorService
+    private lateinit var executor: Executor
 
     private lateinit var subject: MainPresenter
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this, relaxUnitFun = true)
-        executor = Executors.newSingleThreadExecutor()
+        executor = TestingThreadExecutor()
+        mainRepo = MainRepoTestingImpl()
+        view = MainViewTestingImpl()
         subject = MainPresenter(mainRepo, executor, view)
     }
 
     @Test
     fun `getHtml success`() {
         // given
-        val url = "https://test.com/"
-        val html = "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<title>Page Title</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "\n" +
-                "<h1>This is a Heading</h1>\n" +
-                "<p>This is a paragraph.</p>\n" +
-                "\n" +
-                "</body>\n" +
-                "</html>"
+        val url = FakeData.successUrl
 
-
-        val mapList = ArrayList<Word>()
-        mapList.add(Word("page",1))
-        mapList.add(Word("title",1))
-        mapList.add(Word("this",2))
-        mapList.add(Word("is",2))
-        mapList.add(Word("a",2))
-        mapList.add(Word("heading",1))
-        mapList.add(Word("paragraph",1))
-
-        every { mainRepo.getWebPage(url) } returns Result.Success(html)
-
-        mockkStatic(HtmlCompat::class)
+        val wordsList = FakeData.wordsList
 
         //when
         subject.getHtml(url)
 
         // then
-        verify { view.showLoading() }
-        verify { mainRepo.getWebPage(url) }
-        verify { view.setList(mapList) }
-        verify { view.hideLoading() }
+        Assert.assertTrue(view.showLoadingCalledFlag)
+        Assert.assertTrue(mainRepo.calledFlag)
+        Assert.assertTrue(view.setListCalledFlag)
+        Assert.assertEquals(wordsList, view.wordslist)
+        Assert.assertTrue(view.hideLodaingCalledFlag)
+
     }
 
     @Test
     fun `getHtml Network Failure`() {
         // given
-        val url = "https://test.com/"
+        val url = FakeData.failureUrl
 
-        every { mainRepo.getWebPage(url) } returns Result.Failure(IOException())
+        val wordsList = FakeData.wordsList
 
         //when
         subject.getHtml(url)
 
         // then
-        verify { view.showLoading() }
-        verify { mainRepo.getWebPage(url) }
-        verify { view.onFailure(IOException().localizedMessage) }
-        verify { view.hideLoading() }
+        Assert.assertTrue(view.showLoadingCalledFlag)
+        Assert.assertTrue(mainRepo.calledFlag)
+        Assert.assertTrue(view.setListCalledFlag)
+        Assert.assertEquals(wordsList, view.wordslist)
+        Assert.assertTrue(view.hideLodaingCalledFlag)
+        Assert.assertEquals(wordsList, view.wordslist)
+        Assert.assertEquals(IOException().localizedMessage, view.failuerMessage)
+
     }
 
     @Test
     fun `removeHtmlTagsAndCss success`() {
-        val html = "<!DOCTYPE html>" +
-                "<html>" +
-                "<head>" +
-                "<title>Page Title </title>" +
-                "</head>" +
-                "<body>" +
-                "<h1>This is a Heading </h1>" +
-                "<p>This is a paragraph.</p>" +
-                "</body>" +
-                "</html>"
+        val html = FakeData.html
         val expected = "Page Title This is a Heading This is a paragraph "
         Assert.assertEquals(expected, subject.removeHtmlTagsAndCss(html))
     }

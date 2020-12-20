@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.moanes.instabugtask.R
-import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.data.model.Word
 
 class WordsAdapter : ListAdapter<Word, WordViewHolder>(WordItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {

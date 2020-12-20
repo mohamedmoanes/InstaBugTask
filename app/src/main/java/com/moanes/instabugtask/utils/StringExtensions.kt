@@ -1,6 +1,6 @@
 package com.moanes.instabugtask.utils
 
-import com.moanes.instabugtask.data.Word
+import com.moanes.instabugtask.data.model.Word
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -11,7 +11,7 @@ fun String.toWordsCountList(): ArrayList<Word> {
     val pattern = Pattern.compile("[\\s]*[a-zA-Z]+[\\s]+")
     val matcher: Matcher = pattern.matcher(this)
     while (matcher.find()) {
-        val word=Word(matcher.group().trim().toLowerCase(Locale.getDefault()), 1)
+        val word= Word(matcher.group().trim().toLowerCase(Locale.getDefault()), 1)
         if (wordsList.contains(Word(matcher.group().trim().toLowerCase(Locale.getDefault()), 1))){
             wordsList[wordsList.indexOf(word)].increaseCount()
         }else

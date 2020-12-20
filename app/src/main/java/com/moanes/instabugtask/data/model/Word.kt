@@ -1,4 +1,4 @@
-package com.moanes.instabugtask.data
+package com.moanes.instabugtask.data.model
 
 data class Word(val word: String, var count: Int) {
     fun increaseCount() {
